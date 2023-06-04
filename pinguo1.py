@@ -1,26 +1,29 @@
+import sys
+
 import numpy as np
 import tensorflow as tf
 import cv2
 import os
 from PIL import Image
+sys.path.append('.')
 
 
 # global Var
 model = tf.keras.applications.ResNet50(weights='imagenet', include_top=False)
 
-def read_and_preprocess_images_from_directory(path):
-    images = []
-    for filename in os.listdir(path):
-        if filename.endswith(".jpg") or filename.endswith(".png"):
-            img = cv2.imread(os.path.join(path, filename))
-            assert img is not None and img.size > 0, f"{filename} not loaded or empty"
-            img = cv2.resize(img, (224, 224))  # 注意这里我们将图像缩放至(224, 224)的大小
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # 将BGR转为RGB
-            img = img.astype(np.float32)  # 转换为浮点类型
-            img = img / 255.0  # 将像素值缩放至[0, 1]的范围
-            images.append(img)
-    images = np.stack(images, axis=0)
-    return images
+def read_and_preprocess_images_from_directory(img):
+    # images = []
+    # for filename in os.listdir(path):
+    #     if filename.endswith(".jpg") or filename.endswith(".png"):
+    #         img = cv2.imread(os.path.join(path, filename))
+    #         assert img is not None and img.size > 0, f"{filename} not loaded or empty"
+    img = cv2.resize(img, (224, 224))  # 注意这里我们将图像缩放至(224, 224)的大小
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # 将BGR转为RGB
+    img = img.astype(np.float32)  # 转换为浮点类型
+    img = img / 255.0  # 将像素值缩放至[0, 1]的范围
+    # images.append(img)
+    # images = np.stack(images, axis=0)
+    return img
 
 def extract_features(images):
     features = model.predict(images)
@@ -87,7 +90,7 @@ def search_similar_image(in_img: Image, count: int) -> list:
     # cv2.destroyAllWindows()
 
 
-if __name__ == 'name':
-    print('****************')
-    print(search_similar_image(Image.open('.\\moxing\\input.png'), 4))
+# if __name__ == '__main__':
+#     print(search_similar_image(
+#         Image.open(os.path.join('moxing', 'input.png')), 4))
 
