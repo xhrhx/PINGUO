@@ -2,7 +2,10 @@ import gradio as gr
 from PIL import Image
 from pinguo1 import search_similar_image
 
-search_size = 4 * 2
+# 显示相似图片数量
+col_size = 4
+raw_size = 4
+search_size = col_size * raw_size
 
 
 def search_process(in_img) -> list:
@@ -19,7 +22,7 @@ def create_ui():
             with gr.Column(scale=2):
                 bt_submit = gr.Button('开始搜寻')
         with gr.Row():
-            out_img = gr.Gallery().style(columns=[4], rows=[2])
+            out_img = gr.Gallery().style(columns=[col_size], rows=[raw_size])
 
         bt_submit.click(search_process, inputs=[
             in_img
